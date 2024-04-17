@@ -1,3 +1,3 @@
 ## Architecture
 
-![Image]("owen_shitty_drawing.jpg)
+![Image]("owen_shitty_drawing.jpeg)
