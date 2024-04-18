@@ -1,7 +1,11 @@
+// modules
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Login from './components/Login';
 import { BrowserRouter as Router } from 'react-router-dom';
+
+// components
+import Login from './components/Login';
+import Home from './components/Home';
 
 const RouterComponent = () => {
   return (
@@ -12,7 +16,7 @@ const RouterComponent = () => {
     <Router>
         <Routes>
             <Route path="/" element={<Login />} />
-            
+            <Route path="/home/:username" element={<Home />} />
         </Routes>
     </Router>
   );
