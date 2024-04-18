@@ -48,6 +48,7 @@ Outputs:
 
 ### Verify JWT:
 
+This is the only function closed off to the outside world, but will be called by the functions below to verify that they should trust an incoming request.
 
 Inputs:
         
@@ -66,13 +67,88 @@ Outputs:
 
 ### Get all events:
 
+Inputs:
+        
+        {
+            jwt:
+            uid:
+        }
+
+Outputs:
+
+        {
+            eventlist: [
+                {
+                    eid:
+                    starttime:
+                    endtime:
+                    desc:
+                    name:
+                    priority: (L/M/H)
+                }, ...
+            ]
+        }
+
 ### Create event:
+
+Inputs:
+        
+        {
+            jwt:
+            uid:
+            starttime: (the millis time since 1970)
+            endtime:
+            name:
+            desc:
+            priority: (L/M/H)
+        }
+
+Outputs:
+
+        {
+            success: (T/F)
+        }
 
 ### Update event:
 
+Inputs:
+        
+        {
+            jwt:
+            uid:
+            starttime: (the millis time since 1970)
+            endtime:
+            name:
+            desc:
+            priority: (L/M/H)
+            eid:
+        }
+
+Outputs:
+
+        {
+            success: (T/F)
+        }
+
 ### Delete event:
 
-Each need in the two function classes can be done as its own function, or these two sets can each be their own function but its up to you. Technically each function is supposed to do one specific thing, but I dont think it matters. Just lmk which you choose and the endpoints I am supposed to be hitting. If you choose to do this as two functions, we can add a field to the input that specifies which specific functionality needs to be accessed by the function.
+Inputs:
+        
+        {
+            jwt:
+            uid:
+            eid:
+        }
+
+Outputs:
+
+        {
+            success: (T/F)
+        }
+
+For all functions, 200 should be a successful response, 401 if the jwt cannot be verified/is invalid, and 400 should be some input error with as much info as you can return as the msg.
+
+Each need in the two function classes can be done as its own function, or these two sets can each be their own function but its up to you. Technically each function is supposed to do one specific thing, but I dont think it matters. Just lmk which you choose and the endpoints I am supposed to be hitting. If you choose to do this as two functions, we can add a field to the input that specifies which specific functionality needs to be accessed by the function. Oliver and Sam just let me know how you actually end up implementing the above.
 
 ## DB:
 This is Shivani's purview, I will not be interacting with this layer so I do not know what would be best.
