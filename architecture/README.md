@@ -44,6 +44,7 @@ Outputs:
         {
             jwt:
             uid:
+            fname:
         }
 
 ### Verify JWT:
