@@ -157,4 +157,4 @@ Each need in the two function classes can be done as its own function, or these 
 This is Shivani's purview, I will not be interacting with this layer so I do not know what would be best.
 
 ## Integration:
-Nicks problem: figure out how this stuff all needs to be connected and what the best platform to host the react app would be. Also know the architecture well so connection between db and functions can happen early so that they can be tested.
+Nicks problem: figure out how this stuff all needs to be connected and what the best platform to host the react app would be. Also know the architecture well so connection between db and functions can happen early so that they can be tested. Also figure out the github actions, figure out what dan wants for this and figure out if this needs to work for specifically just the server where code would automatically be pushed or if all components need to be updated on pushes to the repo.
