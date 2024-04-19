@@ -16,7 +16,7 @@ const LoginPage = () => {
 
   return (
     <div className='login-page'>
-      <h2>{isRegistering ? 'Register' : 'Login'}</h2>
+      <h2 className='text'>{isRegistering ? 'Register' : 'Login'}</h2>
       <form onSubmit={handleSubmit}>
         <input type="text" value={username} onChange={e => setUsername(e.target.value)} placeholder="Username" />
         <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password" />
