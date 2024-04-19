@@ -19,6 +19,9 @@ const LoginPage = () => {
     if (!isRegistering) {
       let user = await apiCallLogin(username, password);
       let uname = user.username;
+
+      console.log(user);
+
       navigate(`/home/${uname}`, { state: {user} });
     }
   };

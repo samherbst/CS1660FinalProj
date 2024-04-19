@@ -1,4 +1,10 @@
-.home-page {
-    text-align: center;
-    padding-top: 12%;
+div .home-page {
+    margin-top: 13%;
+  }
+
+#welcome {
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 1%;
+    margin-left: 2%;
   }
