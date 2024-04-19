@@ -4,7 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 // components
-import Login from './components/Login';
+import LoginPage from './components/LoginPage';
 import Home from './components/Home';
 
 const RouterComponent = () => {
@@ -15,7 +15,7 @@ const RouterComponent = () => {
     // </Routes>
     <Router>
         <Routes>
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<LoginPage />} />
             <Route path="/home/:username" element={<Home />} />
         </Routes>
     </Router>
