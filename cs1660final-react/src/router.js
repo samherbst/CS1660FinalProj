@@ -9,10 +9,6 @@ import Home from './components/Home';
 
 const RouterComponent = () => {
   return (
-    // <Routes>
-    //     <h1>React App</h1>
-    //   {/* <Route path="/" element={<Login />} /> */}
-    // </Routes>
     <Router>
         <Routes>
             <Route path="/" element={<LoginPage />} />
