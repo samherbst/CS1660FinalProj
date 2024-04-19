@@ -1,0 +1,22 @@
+.login-page {
+    text-align: center;
+    padding-top: 12%;
+    margin-right: 8%;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  form input {
+    margin-top: 1%;
+    width: 15%;
+    margin-left: 42%;
+  }
+
+  button {
+    margin: 0 auto;
+    margin-top: 1%;
+    
+  }

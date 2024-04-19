@@ -6,6 +6,8 @@ import ReactDOM from 'react-dom';
 import RouterComponent from './router';
 import Header from './components/Header';
 
+import './style/index.css';
+
 ReactDOM.render(
   <React.StrictMode>
     <Header />
