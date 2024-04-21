@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import '../style/Login.css';
+import { apiCallLogin} from '../function_calls.js'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -9,9 +11,19 @@ const LoginPage = () => {
   const [firstName, setFirstName] = useState(''); // New state for the first name field
   const [lastName, setLastName] = useState(''); // New state for the last name field
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission
+    if (!isRegistering) {
+      let user = await apiCallLogin(username, password);
+      let uname = user.username;
+
+      console.log(user);
+
+      navigate(`/home/${uname}`, { state: {user} });
+    }
   };
 
   return (
