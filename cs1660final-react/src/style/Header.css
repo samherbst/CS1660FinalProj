@@ -9,6 +9,7 @@
     background-color: #333;
     padding: 10px;
     align-items: center;
+    z-index: 10;
   }
   
   .navbar a {

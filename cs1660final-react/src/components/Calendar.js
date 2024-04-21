@@ -3,15 +3,6 @@ import '../style/Calendar.css';
 
 import Day from './Day';
 
-// function getEventsForDay(events = [], date) {
-//     // return events.filter(event => {
-//     //     // const eventDate = new Date(event.date * 1000);
-//     //     // return eventDate.getDate() === date.getDate() &&
-//     //     //     eventDate.getMonth() === date.getMonth() &&
-//     //     //     eventDate.getFullYear() === date.getFullYear();
-//     // });
-// }
-
 function monthToWord(month) {
     switch(month) {
         case 0:
@@ -43,11 +34,15 @@ function monthToWord(month) {
     }
 }
 
+function eventInMonth(event, month) {
+    
+}
+
 const Calendar = (props) => {
     for (let i = 0; i < props.events.length; i++) {
         console.log("Event: ", props.events[i])
     }
-
+ 
     // get current date
     let today = new Date();
     let currMonth = monthToWord(today.getMonth()) + " " + today.getFullYear();
@@ -65,18 +60,18 @@ const Calendar = (props) => {
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
   
     return (
-      <div className="calendar">
-        <h3>{currMonth}</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
-          {daysOfWeek.map((day, index) => (
-            <div key={index}>{day}</div>
-          ))}
-          {Array(firstDayOfMonth).fill(null).map((_, index) => <div key={index} />)}
-          {dates.map((date, index) => (
-            <Day key={index + firstDayOfMonth} date={date} />
-          ))}
+        <div>
+            <h3>{currMonth}</h3>
+            <div className="calendar" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
+                {daysOfWeek.map((day, index) => (
+                    <div key={index}>{day}</div>
+                ))}
+                {Array(firstDayOfMonth).fill(null).map((_, index) => <div key={index} />)}
+                {dates.map((date, index) => (
+                    <Day key={index + firstDayOfMonth} date={date} />
+                ))}
+            </div>
         </div>
-      </div>
     );
   };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { apiCallToGetEvents } from '../function_calls.js';
 import Calendar from './Calendar';
@@ -8,6 +8,8 @@ import '../style/Home.css';
 
 const Home = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+
     const user = location.state.user;
 
     const uid = user.uid;
@@ -18,6 +20,11 @@ const Home = () => {
 
     console.log("Welcoming user: " + fname + " " + lname + " with username: " + username + " to the homepage")
 
+
+    const handleLogout = () => {
+        navigate('/');
+    };
+
     let resp = apiCallToGetEvents(uid, apiJwt);
     let events = resp.events;
 
@@ -26,6 +33,7 @@ const Home = () => {
             <div id='welcome'>
                 <h2>Welcome {fname}</h2>
             </div>
+            <button id="logout" onClick={handleLogout}>Logout</button>
             <div className='calendar'>
                 <Calendar events={events} />
             </div>
