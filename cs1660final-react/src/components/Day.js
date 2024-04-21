@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import BigDay from './BigDay';
 
-const Day = ({ date, dayEvents }) => {
+import '../style/Day.css';
+
+const Day = ({ date, dayEvents = [] }) => {
+    const [showBigDay, setShowBigDay] = useState(false);
+
+    const handleClick = () => {
+        setShowBigDay(true);
+    };
+
+    const handleClose = () => {
+        setShowBigDay(false);
+    };
+
     return(
-        <div className='dayBox'>
+        <div className='dayBox' onClick={handleClick}>
             <div id='dayNum'>{date.getDate()}</div>
-            <div id='dayEvents'>
-                {/* {dayEvents.map(event => (
-                    <div key={event.id} className='event'>
-                        <div>{event.title}</div>
-                        <div>{event.time}</div>
-                    </div>
-                ))} */}
-            </div>
+
+            {showBigDay && <BigDay date={date} events={dayEvents} onClose={handleClose} />}
+
+            {/* Rest of your code */}
         </div>
     );
 };
