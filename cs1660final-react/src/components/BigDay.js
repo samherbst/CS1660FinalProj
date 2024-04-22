@@ -74,11 +74,11 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
         date.setHours(hour + (ampm === 'PM' ? 12 : 0));
         date.setMinutes(minute);
         date.setSeconds(0);
-        return Math.floor(date.getTime() / 1000);
+        return Math.floor(date.getTime());
     }
 
     function convertFromEpoch(epoch) {
-        const date = new Date(epoch * 1000); // Convert epoch to milliseconds
+        const date = new Date(epoch); // Convert epoch to milliseconds
         let hours = date.getHours();
         let minutes = date.getMinutes();
         const ampm = hours >= 12 ? 'PM' : 'AM';
