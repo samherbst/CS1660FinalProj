@@ -216,11 +216,11 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                         <form onSubmit={handleUpdateEvent}>
                             <label>
                                 Name:
-                                <input type="text" name="name" value={currentEvent.name} />
+                                <input id = "update_form_name" type="text" name="name" value={currentEvent.name} />
                             </label>
                             <label>
                         Start Time:
-                        <select name="startHour" defaultValue={convertFromEpoch(event.starttime).hours}>
+                        <select id = "start_time_drop_down" name="startHour" defaultValue={convertFromEpoch(event.starttime).hours}>
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
@@ -241,7 +241,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                     </label>
                     <label>
                         End Time:
-                        <select name="endHour" defaultValue={convertFromEpoch(event.endtime).hours}>
+                        <select id = "end_time_drop_down" name="endHour" defaultValue={convertFromEpoch(event.endtime).hours}>
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}

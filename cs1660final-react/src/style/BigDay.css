@@ -28,6 +28,7 @@
     width: 114%;
     padding: 1%;
     border-radius: 6px;
+    margin-bottom: 100px;
 }
 
 #event_text
@@ -62,4 +63,19 @@
 #delete_button
 {
     margin-left:34%;
+}
+
+#start_time_drop_down
+{
+    margin-left: 70px;
+}
+
+#end_time_drop_down
+{
+    margin-left: 76px;
+}
+
+#update_form_name
+{
+    margin-left:70px;
 }
