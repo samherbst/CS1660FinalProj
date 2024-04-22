@@ -12,11 +12,11 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
     const [currentEvent, setCurrentEvent] = useState(null);
     const [updateFormOpen, setUpdateFormOpen] = useState(false);
     const [updatedEvent, setUpdatedEvent] = useState({
-        starttime: '',
-        endtime: '',
+        starttime: 0,
+        endtime: 0,
         name: '',
         desc: '',
-        priority: ''
+        priority: 'H'
     });
 
     const doUpdate = (event) => {
@@ -33,8 +33,6 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
 
     const handleUpdateEvent = (event) => {
         event.preventDefault();
-        
-
 
         apiCallToChangeEvent(user.uid, user.jwt, currentEvent.eid, updatedEvent);
         
@@ -77,6 +75,31 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
         date.setMinutes(minute);
         date.setSeconds(0);
         return Math.floor(date.getTime() / 1000);
+    }
+
+    function convertFromEpoch(epoch) {
+        const date = new Date(epoch * 1000); // Convert epoch to milliseconds
+        let hours = date.getHours();
+        let minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+    
+        // Convert from 24 hour to 12 hour format and adjust for midnight and noon
+        if (hours > 12) {
+            hours -= 12;
+        } else if (hours === 0) {
+            hours = 12;
+        }
+    
+        // Add leading zero to minutes if less than 10
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+    
+        return {
+            hours,
+            minutes,
+            ampm
+        };
     }
 
     const convertEpochToTime = (epoch) => {
@@ -124,7 +147,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                                 </option>
                             ))}
                         </select>
-                        <select name="endAMPM">
+                        <select name="startAMPM">
                             <option value="AM">AM</option>
                             <option value="PM">PM</option>
                         </select>
@@ -160,7 +183,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                     </label>
                     <label>
                         Priority:
-                        <select name="priority" value={currentEvent.priority} className="prioritybox">
+                        <select name="priority" className="prioritybox">
                             <option value="H">High</option>
                             <option value="M">Medium</option>
                             <option value="L">Low</option>
@@ -171,8 +194,8 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                 <button onClick={() => setCreateFormOpen(false)}>Cancel</button>
             </div>
             )}
-            {sortedEvents.map((event, index) => (
-                <div key={index}>
+            {sortedEvents.map((event, index) => ( 
+                event && <div key={index}>
                     <p><strong className="priority" id={event.priority}>{event.name}</strong><br />
                     {convertEpochToTime(event.starttime)} - {convertEpochToTime(event.endtime)}<br />
                     {event.desc}
@@ -197,42 +220,42 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                             </label>
                             <label>
                         Start Time:
-                        <select name="startHour">
+                        <select name="startHour" defaultValue={convertFromEpoch(event.starttime).hours}>
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
                                 </option>
                             ))}
                         </select>
-                        <select name="startMinute">
+                        <select name="startMinute" defaultValue={convertFromEpoch(event.starttime).minutes}>
                             {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
                                 <option key={minute}>
                                     {minute}
                                 </option>
                             ))}
                         </select>
-                        <select name="endAMPM">
+                        <select name="startAMPM" defaultValue={convertFromEpoch(event.starttime).ampm}>
                             <option value="AM">AM</option>
                             <option value="PM">PM</option>
                         </select>
                     </label>
                     <label>
                         End Time:
-                        <select name="endHour">
+                        <select name="endHour" defaultValue={convertFromEpoch(event.endtime).hours}>
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
                                 </option>
                             ))}
                         </select>
-                        <select name="endMinute">
+                        <select name="endMinute" defaultValue={convertFromEpoch(event.endtime).minutes}>
                             {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
                                 <option key={minute}>
                                     {minute}
                                 </option>
                             ))}
                         </select>
-                        <select name="endAMPM">
+                        <select name="endAMPM" defaultValue={convertFromEpoch(event.endtime).ampm}>
                             <option value="AM">AM</option>
                             <option value="PM">PM</option>
                         </select>
