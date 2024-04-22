@@ -12,7 +12,7 @@
     border-radius: 10px;
 }
 
-h4 {
+#title_big_day {
     text-align: center;
     margin-top: 5%;
 }
@@ -20,15 +20,19 @@ h4 {
 #bigDayEvents {
     max-height: 55vh;
     overflow-y: auto;
-    margin-left: 5%;
-    padding-right:20%
+    margin-left: 21%;
+    padding-right:20%;
 }
 
 .priority {
     width: 114%;
     padding: 1%;
-    margin-bottom: 3%;
     border-radius: 6px;
+}
+
+#event_text
+{
+    text-align: center;
 }
 
 #H {
@@ -43,7 +47,19 @@ h4 {
     background-color: green;
 }
 
-#doneButton {
+#doneButton 
+{
     float: right;
     margin-right: 5%;
+}
+
+#create_event_button
+{
+    margin-left:34%;
+    margin-bottom:3%;
+}
+
+#delete_button
+{
+    margin-left:34%;
 }

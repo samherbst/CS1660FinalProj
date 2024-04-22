@@ -125,9 +125,9 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
     
     return(
         <div className='bigDayBox'>
-            <h4>Events for {date.toDateString()}</h4>
+            <h4 id = "title_big_day">Events for {date.toDateString()}</h4>
             <div id='bigDayEvents'>
-            {!updateFormOpen && <button onClick={handleOpenCreateForm}>Create Event</button>}
+            {!updateFormOpen && <button id = "create_event_button" onClick={handleOpenCreateForm}>Create Event</button>}
             {createFormOpen && (
             <div className="form" id="createForm">
                 <form onSubmit={handleCreateEvent}>
@@ -196,7 +196,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
             )}
             {sortedEvents.map((event, index) => ( 
                 event && <div key={index}>
-                    <p><strong className="priority" id={event.priority}>{event.name}</strong><br />
+                    <p id = "event_text"><strong class ="priority" id={event.priority}>{event.name}</strong><br />
                     {convertEpochToTime(event.starttime)} - {convertEpochToTime(event.endtime)}<br />
                     {event.desc}
                     </p>
@@ -205,8 +205,8 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                     <div>
                         {!updateFormOpen && 
                             <div>
-                                <button onClick={() => doDelete(event.eid)}>Delete</button>
-                                <button onClick={() => doUpdate(event)}>Update</button>
+                                <button id = "delete_button" onClick={() => doDelete(event.eid)}>Delete</button>
+                                <button id = "update_button" onClick={() => doUpdate(event)}>Update</button>
                             </div>
                         }
                     </div>
