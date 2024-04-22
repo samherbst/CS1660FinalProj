@@ -20,6 +20,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
     });
 
     const doUpdate = (event) => {
+        setUpdateFormOpen(true);
         setCurrentEvent(event);
         setUpdatedEvent({
             starttime: event.starttime,
@@ -28,7 +29,6 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
             desc: event.desc,
             priority: event.priority
         });
-        setUpdateFormOpen(true);
     }
 
     const handleUpdateEvent = (event) => {
@@ -125,46 +125,55 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                 <button onClick={() => setCreateFormOpen(false)}>Cancel</button>
             </div>
             )}
-            {updateFormOpen && (
-            <div className="form" id="updateForm">
-                <form onSubmit={handleUpdateEvent}>
-                    <label>
-                        Name:
-                        <input type="text" name="name" value={currentEvent.name} />
-                    </label>
-                    <label>
-                        Start Time:
-                        <input type="number" name="starttime" value={currentEvent.starttime} />
-                    </label>
-                    <label>
-                        End Time:
-                        <input type="number" name="endtime" value={currentEvent.endtime} />
-                    </label>
-                    <label>
-                        Description:
-                        <input type="text" name="desc" value={currentEvent.desc} />
-                    </label>
-                    <label>
-                        Priority:
-                        <select name="priority" value={currentEvent.priority} className="prioritybox">
-                            <option value="H">High</option>
-                            <option value="M">Medium</option>
-                            <option value="L">Low</option>
-                        </select>
-                    </label>
-                    <input type="submit" value="Submit" className="submitbutton"/>
-                </form>
-                <button onClick={() => setUpdateFormOpen(false)}>Cancel</button>
-            </div>
-            )}
             {sortedEvents.map((event, index) => (
                 <div key={index}>
                     <p><strong className="priority" id={event.priority}>{event.name}</strong><br />
                     {convertEpochToTime(event.starttime)} - {convertEpochToTime(event.endtime)}<br />
                     {event.desc}
                     </p>
-                    <button onClick={() => doDelete(event.eid)}>Delete</button>
-                    <button onClick={() => doUpdate(event)}>Update</button>
+
+                    {(!updateFormOpen || currentEvent.eid !== event.id) && 
+                    <div>
+                        {!updateFormOpen && 
+                            <div>
+                                <button onClick={() => doDelete(event.eid)}>Delete</button>
+                                <button onClick={() => doUpdate(event)}>Update</button>
+                            </div>
+                        }
+                    </div>
+                    }
+                    {updateFormOpen && currentEvent.eid === event.eid && (
+                    <div className="form" id="updateForm">
+                        <form onSubmit={handleUpdateEvent}>
+                            <label>
+                                Name:
+                                <input type="text" name="name" value={currentEvent.name} />
+                            </label>
+                            <label>
+                                Start Time:
+                                <input type="number" name="starttime" value={currentEvent.starttime} />
+                            </label>
+                            <label>
+                                End Time:
+                                <input type="number" name="endtime" value={currentEvent.endtime} />
+                            </label>
+                            <label>
+                                Description:
+                                <input type="text" name="desc" value={currentEvent.desc} />
+                            </label>
+                            <label>
+                                Priority:
+                                <select name="priority" value={currentEvent.priority} className="prioritybox">
+                                    <option value="H">High</option>
+                                    <option value="M">Medium</option>
+                                    <option value="L">Low</option>
+                                </select>
+                            </label>
+                            <input type="submit" value="Submit" className="submitbutton"/>
+                        </form>
+                        <button onClick={() => setUpdateFormOpen(false)}>Cancel</button>
+                    </div>
+            )}
                 </div>
             ))}
             </div>
