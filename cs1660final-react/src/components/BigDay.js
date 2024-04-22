@@ -2,16 +2,16 @@
 // the events for that day as well as giving you the option to add, update, or delete events. 
 // This is the BigDay component. 
 
-import React from 'react';
+import React, { useState } from 'react';
 import '../style/BigDay.css';
 
 import { apiCallToChangeEvent, apiCallToCreateEvent, apiCallToDeleteEvent } from '../function_calls';
 
 const BigDay = ({ date, dayEvents, onClose, user }) => {
-    const [createFormOpen, setCreateFormOpen] = React.useState(false);
-    const [currentEvent, setCurrentEvent] = React.useState(null);
-    const [updateFormOpen, setUpdateFormOpen] = React.useState(false);
-    const [updatedEvent, setUpdatedEvent] = React.useState({
+    const [createFormOpen, setCreateFormOpen] = useState(false);
+    const [currentEvent, setCurrentEvent] = useState(null);
+    const [updateFormOpen, setUpdateFormOpen] = useState(false);
+    const [updatedEvent, setUpdatedEvent] = useState({
         starttime: '',
         endtime: '',
         name: '',
@@ -63,6 +63,8 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
             desc: form.desc.value,
             priority: form.priority.value
         };
+
+        apiCallToCreateEvent(user.uid, user.jwt, newEvent);
     }
 
     const convertEpochToTime = (epoch) => {
@@ -90,7 +92,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
         <div className='bigDayBox'>
             <h4>Events for {date.toDateString()}</h4>
             <div id='bigDayEvents'>
-            <button onClick={handleOpenCreateForm}>Create Event</button>
+            {!updateFormOpen && <button onClick={handleOpenCreateForm}>Create Event</button>}
             {createFormOpen && (
             <div className="form" id="createForm">
                 <form onSubmit={handleCreateEvent}>
@@ -112,9 +114,13 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                     </label>
                     <label>
                         Priority:
-                        <input type="text" name="priority" />
+                        <select name="priority" value={currentEvent.priority} className="prioritybox">
+                            <option value="H">High</option>
+                            <option value="M">Medium</option>
+                            <option value="L">Low</option>
+                        </select>
                     </label>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" className="submitbutton"/>
                 </form>
                 <button onClick={() => setCreateFormOpen(false)}>Cancel</button>
             </div>
@@ -123,26 +129,30 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
             <div className="form" id="updateForm">
                 <form onSubmit={handleUpdateEvent}>
                     <label>
+                        Name:
+                        <input type="text" name="name" value={currentEvent.name} />
+                    </label>
+                    <label>
                         Start Time:
-                        <input type="number" name="starttime" />
+                        <input type="number" name="starttime" value={currentEvent.starttime} />
                     </label>
                     <label>
                         End Time:
-                        <input type="number" name="endtime" />
-                    </label>
-                    <label>
-                        Name:
-                        <input type="text" name="name" />
+                        <input type="number" name="endtime" value={currentEvent.endtime} />
                     </label>
                     <label>
                         Description:
-                        <input type="text" name="desc" />
+                        <input type="text" name="desc" value={currentEvent.desc} />
                     </label>
                     <label>
                         Priority:
-                        <input type="text" name="priority" />
+                        <select name="priority" value={currentEvent.priority} className="prioritybox">
+                            <option value="H">High</option>
+                            <option value="M">Medium</option>
+                            <option value="L">Low</option>
+                        </select>
                     </label>
-                    <input type="submit" value="Submit" />
+                    <input type="submit" value="Submit" className="submitbutton"/>
                 </form>
                 <button onClick={() => setUpdateFormOpen(false)}>Cancel</button>
             </div>
