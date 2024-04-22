@@ -8,6 +8,8 @@
     margin: 0;
     padding: 0;
     position: relative;
+    border-radius: 4px;
+    background-color: lightgrey;
 }
 
 #dayNum {
@@ -15,4 +17,30 @@
     top: 1%;
     right: 1%;
     line-height: normal;
+}
+
+#eventText {
+    position: absolute;
+    top: 14%;
+    left: 17%;
+    margin-top: 5%;
+    font-size: 0.8em;
+}
+
+.pri_box{
+    width: 110%;
+    margin-bottom: 2%;
+    border-radius: 10px; /* Adjust this value as needed */
+}
+
+#high_priority {
+    background-color: red;
+}
+
+#medium_priority {
+    background-color: orange;
+}
+
+#low_priority {
+    background-color: green;
 }

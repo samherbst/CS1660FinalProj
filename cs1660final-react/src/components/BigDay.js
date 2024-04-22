@@ -5,13 +5,16 @@
 import React from 'react';
 
 const BigDay = ({ date, dayEvents, onClose }) => {
-    const handleClick = (event) => {
+    const handleClose = (event) => {
         event.stopPropagation();
+        onClose();
     };
     
+    console.log("BigDay date: ", date);
+
     return(
         <div className='bigDayBox'>
-            <div id='bigDayNum'>{date.getDate()}</div>
+            <div id='bigDayNum'>{}</div>
             <div id='bigDayEvents'>
                 Hello
                 {/* {dayEvents.map(event => (
@@ -20,7 +23,7 @@ const BigDay = ({ date, dayEvents, onClose }) => {
                         <div>{event.time}</div>
                     </div>
                 ))} */}
-               <button onClick={(event) => { event.stopPropagation(); onClose(); }}>Close</button>
+                <button onClick={handleClose}>Close</button>
             </div>
         </div>
     );

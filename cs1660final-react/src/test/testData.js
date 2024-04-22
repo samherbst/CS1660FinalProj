@@ -17,6 +17,34 @@ export const testData = {
             endtime: 1713893800,
             desc: "Get a cavity filled at 123 main st by dr johnson",
             priority: "H"
+        },
+        {
+            name: "Meeting with boss",
+            starttime: 1713890200,
+            endtime: 1713893800,
+            desc: "Discuss the new project and the deadline",
+            priority: "M"
+        },
+        {
+            name: "Lunch with friends",
+            starttime: 1713890200,
+            endtime: 1713893800,
+            desc: "Go to the new burger place in town",
+            priority: "L"
+        },
+        {
+            name: "Grocery Shopping",
+            starttime: 1713890200,
+            endtime: 1713893800,
+            desc: "Buy milk, eggs, and bread",
+            priority: "L"
+        },
+        {
+            name: "Workout",
+            starttime: 1713890200,
+            endtime: 1713893800,
+            desc: "Go to the gym and do a full body workout",
+            priority: "M"
         }
     ]
 }
