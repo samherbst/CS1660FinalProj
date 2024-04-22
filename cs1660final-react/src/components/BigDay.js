@@ -139,11 +139,11 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                                     {hour}
                                 </option>
                             ))}
-                        </select>
+                        </select>:
                         <select name="startMinute">
                             {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
-                                <option key={minute}>
-                                    {minute}
+                                <option key={minute} value={minute.toString().padStart(2, '0')}>
+                                    {minute.toString().padStart(2, '0')}
                                 </option>
                             ))}
                         </select>
@@ -160,11 +160,11 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                                     {hour}
                                 </option>
                             ))}
-                        </select>
+                        </select>:
                         <select name="endMinute">
                             {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
-                                <option key={minute}>
-                                    {minute}
+                                <option key={minute} value={minute.toString().padStart(2, '0')}>
+                                    {minute.toString().padStart(2, '0')}
                                 </option>
                             ))}
                         </select>
@@ -226,11 +226,11 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                                     {hour}
                                 </option>
                             ))}
-                        </select>
+                        </select>:
                         <select name="startMinute" defaultValue={convertFromEpoch(event.starttime).minutes}>
                             {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
-                                <option key={minute}>
-                                    {minute}
+                                <option key={minute} value={minute.toString().padStart(2, '0')}>
+                                    {minute.toString().padStart(2, '0')}
                                 </option>
                             ))}
                         </select>
@@ -247,11 +247,11 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                                     {hour}
                                 </option>
                             ))}
-                        </select>
+                        </select>:
                         <select name="endMinute" defaultValue={convertFromEpoch(event.endtime).minutes}>
                             {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
-                                <option key={minute}>
-                                    {minute}
+                                <option key={minute} value={minute.toString().padStart(2, '0')}>
+                                    {minute.toString().padStart(2, '0')}
                                 </option>
                             ))}
                         </select>
