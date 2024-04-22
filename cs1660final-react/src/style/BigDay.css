@@ -1,11 +1,49 @@
 .bigDayBox {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 80vmin;
-    height: 80vmin;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    border: 5px solid black;
-    background-color: transparent;
+    position: absolute;
+    border: 1px solid black;
+    margin-top: 12%;
+    margin-left: 25%;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 65%;
+    z-index: 1;
+    background: grey;
+    border-radius: 10px;
+}
+
+h4 {
+    text-align: center;
+    margin-top: 5%;
+}
+
+#bigDayEvents {
+    max-height: 55vh;
+    overflow-y: auto;
+    margin-left: 5%;
+    padding-right:20%
+}
+
+.priority {
+    width: 114%;
+    padding: 1%;
+    margin-bottom: 3%;
+    border-radius: 6px;
+}
+
+#H {
+    background-color: red;
+}
+
+#M {
+    background-color: orange;
+}
+
+#L {
+    background-color: green;
+}
+
+#doneButton {
+    float: right;
+    margin-right: 5%;
 }

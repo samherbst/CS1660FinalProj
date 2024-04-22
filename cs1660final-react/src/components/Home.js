@@ -47,7 +47,7 @@ const Home = () => {
             </div>
             <button id="logout" onClick={handleLogout}>Logout</button>
             <div className='calendar'>
-                {showBigDay && <BigDay {...bigDayProps} onClose={handleClose} />}
+                {showBigDay && <BigDay {...bigDayProps} onClose={handleClose} user={user} />}
                 <Calendar events={events} onDayClick={handleDayClick} />
             </div>
         </div>

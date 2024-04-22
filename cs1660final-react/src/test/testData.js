@@ -9,42 +9,52 @@ export const user = {
     jwt: "eyJhbGci"
 }
 
+function addHourToEpoch(epoch, hours) {
+    return epoch + (hours * 60 * 60 * 1000);
+}
+
 export const testData = {
     events: [
         {
             name: "Dentist Appointment",
             starttime: 1713890200,
-            endtime: 1713893800,
+            endtime: addHourToEpoch(1713890200, 1),
             desc: "Get a cavity filled at 123 main st by dr johnson",
-            priority: "H"
+            priority: "H",
+            eid: 1
         },
         {
             name: "Meeting with boss",
             starttime: 1713890200,
             endtime: 1713893800,
             desc: "Discuss the new project and the deadline",
-            priority: "M"
+            priority: "M",
+            eir: 2
         },
         {
             name: "Lunch with friends",
             starttime: 1713890200,
             endtime: 1713893800,
             desc: "Go to the new burger place in town",
-            priority: "L"
+            priority: "L",
+            eid: 3
         },
         {
             name: "Grocery Shopping",
             starttime: 1713890200,
             endtime: 1713893800,
             desc: "Buy milk, eggs, and bread",
-            priority: "L"
+            priority: "L",
+            eid: 4
         },
         {
             name: "Workout",
             starttime: 1713890200,
             endtime: 1713893800,
             desc: "Go to the gym and do a full body workout",
-            priority: "M"
+            priority: "M",
+            eid: 5
         }
     ]
 }
+
