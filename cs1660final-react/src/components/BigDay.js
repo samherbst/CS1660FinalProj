@@ -34,6 +34,8 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
     const handleUpdateEvent = (event) => {
         event.preventDefault();
         
+
+
         apiCallToChangeEvent(user.uid, user.jwt, currentEvent.eid, updatedEvent);
         
         setCurrentEvent(null);
@@ -56,6 +58,9 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
     const handleCreateEvent = (event) => {
         event.preventDefault();
         const form = event.target;
+
+        console.log()
+
         const newEvent = {
             starttime: parseInt(form.starttime.value),
             endtime: parseInt(form.endtime.value),
@@ -65,6 +70,13 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
         };
 
         apiCallToCreateEvent(user.uid, user.jwt, newEvent);
+    }
+
+    function convertToEpoch (date, hour, minute, ampm) {
+        date.setHours(hour + (ampm === 'PM' ? 12 : 0));
+        date.setMinutes(minute);
+        date.setSeconds(0);
+        return Math.floor(date.getTime() / 1000);
     }
 
     const convertEpochToTime = (epoch) => {
@@ -98,11 +110,45 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                 <form onSubmit={handleCreateEvent}>
                     <label>
                         Start Time:
-                        <input type="number" name="starttime" />
+                        <select name="startHour">
+                            {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                                <option key={hour}>
+                                    {hour}
+                                </option>
+                            ))}
+                        </select>
+                        <select name="startMinute">
+                            {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
+                                <option key={minute}>
+                                    {minute}
+                                </option>
+                            ))}
+                        </select>
+                        <select name="endAMPM">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
                     </label>
                     <label>
                         End Time:
-                        <input type="number" name="endtime" />
+                        <select name="endHour">
+                            {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                                <option key={hour}>
+                                    {hour}
+                                </option>
+                            ))}
+                        </select>
+                        <select name="endMinute">
+                            {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
+                                <option key={minute}>
+                                    {minute}
+                                </option>
+                            ))}
+                        </select>
+                        <select name="endAMPM">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
                     </label>
                     <label>
                         Name:
@@ -150,13 +196,47 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                                 <input type="text" name="name" value={currentEvent.name} />
                             </label>
                             <label>
-                                Start Time:
-                                <input type="number" name="starttime" value={currentEvent.starttime} />
-                            </label>
-                            <label>
-                                End Time:
-                                <input type="number" name="endtime" value={currentEvent.endtime} />
-                            </label>
+                        Start Time:
+                        <select name="startHour">
+                            {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                                <option key={hour}>
+                                    {hour}
+                                </option>
+                            ))}
+                        </select>
+                        <select name="startMinute">
+                            {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
+                                <option key={minute}>
+                                    {minute}
+                                </option>
+                            ))}
+                        </select>
+                        <select name="endAMPM">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </label>
+                    <label>
+                        End Time:
+                        <select name="endHour">
+                            {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
+                                <option key={hour}>
+                                    {hour}
+                                </option>
+                            ))}
+                        </select>
+                        <select name="endMinute">
+                            {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
+                                <option key={minute}>
+                                    {minute}
+                                </option>
+                            ))}
+                        </select>
+                        <select name="endAMPM">
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </label>
                             <label>
                                 Description:
                                 <input type="text" name="desc" value={currentEvent.desc} />
