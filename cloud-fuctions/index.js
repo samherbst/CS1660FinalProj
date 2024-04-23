@@ -8,68 +8,18 @@ import mysql from 'mysql2/promise';
 const app = express();
 app.use(bodyParser.json());
 
-const client = new SecretManagerServiceClient();
-
-let MY_JWT_SECRET;
-
 // HELPER FUNCTIONS:
-
-// Returns jwt secret
-async function getSecret() {
-    const [version] = await client.accessSecretVersion({
-        name: 'projects/cs1660-finalproj/secrets/jwt-secret/versions/latest'
-    });
-    return version.payload.data.toString('utf8');
-}
 
 // verifies the jwt
 function verifyJWT(token, uid) {
     try {
         const decoded = jwt.verify(token, MY_JWT_SECRET);
-        return decoded.uid === uid;
+        return decoded.userID === uid;
     } catch (error) {
         console.error('JWT Verification Error:', error);
         return false;
     }
 }
-
-// TODO: Implement function to authenticate the user with the database
-async function authenticateUser(username, password) {
-    return new Promise((resolve, reject) => {
-        pool.getConnection((err, connection) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-
-            connection.query('SELECT * FROM users_info WHERE username = ? AND password = ?', [username, password], (err, results) => {
-                connection.release();
-
-                if (err) {
-                    reject(err);
-                    return;
-                }
-
-                if (results.length > 0) {
-                    const user = results[0];
-                    const token = jwt.sign(
-                        {
-                            uid: user.uid,
-                            username: user.username
-                        },
-                        MY_JWT_SECRET,
-                        { expiresIn: '1h' }
-                    );
-                    resolve({ user, token }); // Return user object and token
-                } else {
-                    // User not found or authentication failed
-                    resolve(null);
-                }
-            });
-        });
-    });
-}
-
 
 
 // CLOUD FUNCTIONS:
@@ -108,32 +58,52 @@ app.post('/register', async (req, res) => {
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
-    // Placeholder for authentication logic
-    const user = await authenticateUser(username, password);
+    const pool = mysql.createPool({
+        user: 'developer',
+        password: 'cs1660',
+        database: 'user_info',
+        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase'
+    });
 
-    if (!MY_JWT_SECRET) {
-        MY_JWT_SECRET = await getSecret();
-    }
+    try{
 
-    if (user) {
+        const conn = await pool.getConnection();
+
+        const queryText = 'SELECT * FROM user_info WHERE username = ? AND user_password = ?';
+        const [rows] = await conn.query(queryText, [username,password]);
+        conn.release();
+
+        // if nothing returned, no matching username and password
+        if(rows.length === 0){
+            res.status(401).json({ error: 'Authentication failed' });
+            return;
+        }
+
+        const user = rows[0];
+
+        const client = new SecretManagerServiceClient();
+        const [version] = await client.accessSecretVersion({
+            name: 'projects/276748369389/secrets/jwt-secret/versions/latest'
+        });
+        const MY_JWT_SECRET = version.payload.data.toString('utf8');
+
+        // create jwt token
         const token = jwt.sign(
-            {
-                uid: user.uid,
-                username: user.username
-            },
-            MY_JWT_SECRET,
-            { expiresIn: '1h' }
+        { id: user.userID, username: user.username },
+        MY_JWT_SECRET,
+        { expiresIn: '24h' }
         );
 
-        res.json({
+        res.status(200).json({
             jwt: token,
-            uid: user.uid,
-            fname: user.fname,
-            lname: user.lname,
+            uid: user.userID,
             username: user.username
         });
-    } else {
-        res.status(401).json({ error: 'Authentication failed' });
+
+    } catch (error){
+        console.error('Database connection error:', err);
+        res.status(500).json({ msg: "Error here", error: error });
+        if (conn) conn.release();
     }
 });
 
