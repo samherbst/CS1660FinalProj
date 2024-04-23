@@ -21,6 +21,7 @@
 #bigDayEvents {
     max-height: 55vh;
     overflow-y: auto;
+    overflow-x: hidden;
     margin-left: 21%;
     padding-right:20%;
 }
