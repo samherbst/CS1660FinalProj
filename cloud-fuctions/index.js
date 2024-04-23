@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import * as functions from 'firebase-functions';
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import jwt from 'jsonwebtoken';
+import mysql from 'mysql2/promise';
 
 const app = express();
 app.use(bodyParser.json());
@@ -34,15 +35,6 @@ function verifyJWT(token, uid) {
 
 // TODO: Implement function to authenticate the user with the database
 async function authenticateUser(username, password) {
-    const config = {
-        user: 'developer',
-        password: 'cs1660',
-        database: 'user_info',
-        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-    };
-
-    const pool = mysql.createPool(config);
-
     return new Promise((resolve, reject) => {
         pool.getConnection((err, connection) => {
             if (err) {
@@ -50,7 +42,7 @@ async function authenticateUser(username, password) {
                 return;
             }
 
-            connection.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, results) => {
+            connection.query('SELECT * FROM users_info WHERE username = ? AND password = ?', [username, password], (err, results) => {
                 connection.release();
 
                 if (err) {
@@ -82,41 +74,34 @@ async function authenticateUser(username, password) {
 
 // CLOUD FUNCTIONS:
 
-app.post('/register', (req, res) => {
-    // TODO: Add database logic 
-    const { username, password, fname, lname } = req.body;
-    const config = {
+app.post('/register', async (req, res) => {
+
+    res.set('Access-Control-Allow-Origin', "*");
+    res.set('Access-Control-Allow-Methods', 'GET, POST');
+
+    const { username, password } = req.body;
+
+    const pool = mysql.createPool({
         user: 'developer',
         password: 'cs1660',
         database: 'user_info',
-        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-    };
-
-    const pool = mysql.createPool(config);
-    pool.getConnection((err, connection) => {
-        if (err) {
-            reject(err);
-            return;
-        }
-        const config = {
-            user: 'developer',
-            password: 'cs1660',
-            database: 'user_info',
-            socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-        };
-        connection.query('INSERT INTO users (username, password, fname, lname) VALUES (?, ?, ?, ?)', [username, password, fname, lname], (error, results) => {
-            connection.release(); // Release connection back to the pool
-
-            if (error) {
-                console.error('Error executing SQL query:', error);
-                return res.status(500).json({ error: 'Failed to register user' });
-            }
-
-            // User registration successful
-            res.status(200).json({ success: true });
-        });
+        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase'
     });
-    return res.status(200).json({ success: true });
+    
+    try{
+        // Save the user in the database
+        const conn = await pool.getConnection();
+
+        const queryText = 'INSERT INTO user_info(username, user_password) VALUES(?, ?)';
+        const result = await conn.query(queryText, [username, password]);
+        conn.release();
+
+        res.status(200).json({ success: true });
+    } catch (error){
+        console.error('Database error:', error);
+        res.status(500).json({ success: false , error: error});
+        if (conn) conn.release();
+    }
 });
 
 
@@ -160,15 +145,7 @@ app.post('/createEvent', async (req, res) => {
     if (!verifyJWT(token, uid)) {
         return res.status(401).json({ success: false });
     }
-    // TODO: Add event in database
-    const config = {
-        user: 'developer',
-        password: 'cs1660',
-        database: 'user_info',
-        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-    };
 
-    const pool = mysql.createPool(config);
     pool.getConnection((err, connection) => {
         if (err) {
             reject(err);
@@ -205,15 +182,7 @@ app.post('/updateEvent', async (req, res) => {
     if (!verifyJWT(token, uid)) {
         return res.status(401).json({ success: false });
     }
-    // TODO: Update event in database
-    const config = {
-        user: 'developer',
-        password: 'cs1660',
-        database: 'user_info',
-        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-    };
 
-    const pool = mysql.createPool(config);
     pool.getConnection((err, connection) => {
         if (err) {
             reject(err);
@@ -239,6 +208,7 @@ app.post('/updateEvent', async (req, res) => {
     });
     return res.json({ success: true });
 });
+
 app.post('/deleteEvent', async (req, res) => {
 
     const { jwt: token, uid, eid } = req.body;
@@ -248,15 +218,6 @@ app.post('/deleteEvent', async (req, res) => {
         return res.status(401).json({ success: false });
     }
 
-    // TODO: Delete event in database
-    const config = {
-        user: 'developer',
-        password: 'cs1660',
-        database: 'user_info',
-        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-    };
-
-    const pool = mysql.createPool(config);
     pool.getConnection((err, connection) => {
         if (err) {
             reject(err);
@@ -293,15 +254,6 @@ app.post('/getEvents', async (req, res) => {
         return res.status(401).json({ success: false });
     }
 
-    // TODO: Get all events from database
-    const config = {
-        user: 'developer',
-        password: 'cs1660',
-        database: 'user_info',
-        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-    };
-
-    const pool = mysql.createPool(config);
     pool.getConnection((err, connection) => {
         if (err) {
             reject(err);
