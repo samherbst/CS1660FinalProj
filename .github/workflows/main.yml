@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main  # Trigger the workflow on pushes to the main branch
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Use the latest version of Ubuntu as the execution environment
+
+    steps:
+      - name: Checkout repository  # Step to check out the repository code
+        uses: actions/checkout@v2  # Use the checkout action to check out the code
+
+      - name: Install dependencies  # Step to install project dependencies
+        run: npm install  # Replace with the command to install dependencies for your project
+
+      - name: Build  # Step to build the project
+        run: npm run build  # Replace with the command to build your project
