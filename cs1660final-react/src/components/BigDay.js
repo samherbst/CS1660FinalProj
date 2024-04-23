@@ -127,13 +127,13 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
         <div className='bigDayBox'>
             <h4 id = "title_big_day">Events for {date.toDateString()}</h4>
             <div id='bigDayEvents'>
-            {!updateFormOpen && <button id = "create_event_button" onClick={handleOpenCreateForm}>Create Event</button>}
+            {!updateFormOpen && !createFormOpen && <button id = "create_event_button" onClick={handleOpenCreateForm}>Create Event</button>}
             {createFormOpen && (
-            <div className="form" id="createForm">
+            <div id="createForm">
                 <form onSubmit={handleCreateEvent}>
                     <label>
                         Start Time:
-                        <select name="startHour">
+                        <select class = "start_time_drop_down" name="startHour">
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
@@ -154,7 +154,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                     </label>
                     <label>
                         End Time:
-                        <select name="endHour">
+                        <select class = "end_time_drop_down" name="endHour">
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
@@ -175,27 +175,27 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                     </label>
                     <label>
                         Name:
-                        <input type="text" name="name" />
+                        <input class = "form_name" type="text" name="name" />
                     </label>
                     <label>
                         Description:
-                        <input type="text" name="desc" />
+                        <textarea class="description_box" name="desc" rows="4" cols="50"></textarea>
                     </label>
                     <label>
                         Priority:
-                        <select name="priority" className="prioritybox">
+                        <select name="priority" class ="prioritybox">
                             <option value="H">High</option>
                             <option value="M">Medium</option>
                             <option value="L">Low</option>
                         </select>
                     </label>
-                    <input type="submit" value="Submit" className="submitbutton"/>
+                    <button  class = "form_submit_button">Submit</button>
                 </form>
-                <button onClick={() => setCreateFormOpen(false)}>Cancel</button>
+                <button class = "form_cancel_button" onClick={() => setCreateFormOpen(false)}>Cancel</button>
             </div>
             )}
             {sortedEvents.map((event, index) => ( 
-                event && <div key={index}>
+                event && <div id = "update_form_div" key={index}>
                     <p id = "event_text"><strong class ="priority" id={event.priority}>{event.name}</strong><br />
                     {convertEpochToTime(event.starttime)} - {convertEpochToTime(event.endtime)}<br />
                     {event.desc}
@@ -216,11 +216,11 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                         <form onSubmit={handleUpdateEvent}>
                             <label>
                                 Name:
-                                <input id = "update_form_name" type="text" name="name" value={currentEvent.name} />
+                                <input class = "form_name" type="text" name="name" value={currentEvent.name} />
                             </label>
                             <label>
                         Start Time:
-                        <select id = "start_time_drop_down" name="startHour" defaultValue={convertFromEpoch(event.starttime).hours}>
+                        <select class = "start_time_drop_down" name="startHour" defaultValue={convertFromEpoch(event.starttime).hours}>
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
@@ -241,7 +241,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                     </label>
                     <label>
                         End Time:
-                        <select id = "end_time_drop_down" name="endHour" defaultValue={convertFromEpoch(event.endtime).hours}>
+                        <select class = "end_time_drop_down" name="endHour" defaultValue={convertFromEpoch(event.endtime).hours}>
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
@@ -262,19 +262,19 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                     </label>
                             <label>
                                 Description:
-                                <input type="text" name="desc" value={currentEvent.desc} />
+                                <textarea class="description_box" name="desc" rows="4" cols="50"></textarea>
                             </label>
                             <label>
                                 Priority:
-                                <select name="priority" value={currentEvent.priority} className="prioritybox">
+                                <select name="priority" value={currentEvent.priority} class ="prioritybox">
                                     <option value="H">High</option>
                                     <option value="M">Medium</option>
                                     <option value="L">Low</option>
                                 </select>
                             </label>
-                            <input type="submit" value="Submit" className="submitbutton"/>
+                            <button  class = "form_submit_button">Submit</button>
                         </form>
-                        <button onClick={() => setUpdateFormOpen(false)}>Cancel</button>
+                        <button class = "form_cancel_button" onClick={() => setUpdateFormOpen(false)}>Cancel</button>
                     </div>
             )}
                 </div>

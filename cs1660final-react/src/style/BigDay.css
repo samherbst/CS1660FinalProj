@@ -6,10 +6,11 @@
     top: 0;
     left: 0;
     width: 40%;
-    height: 65%;
+    height: 70%;
     z-index: 1;
     background: grey;
     border-radius: 10px;
+    padding:5px;
 }
 
 #title_big_day {
@@ -29,6 +30,12 @@
     padding: 1%;
     border-radius: 6px;
     margin-bottom: 100px;
+}
+
+#update_form_div strong
+{
+    border: 1px solid black; 
+    padding-left: 1px;
 }
 
 #event_text
@@ -65,17 +72,77 @@
     margin-left:34%;
 }
 
-#start_time_drop_down
+.start_time_drop_down
 {
-    margin-left: 70px;
+    margin-left: 59px;
+    margin-bottom: 5px;
 }
 
-#end_time_drop_down
+.end_time_drop_down
 {
-    margin-left: 76px;
+    margin-left: 65px;
+    margin-bottom: 5px;
 }
 
-#update_form_name
+.form_name
 {
-    margin-left:70px;
+    margin-left:88px;
+    width:133px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.prioritybox
+{
+    margin-left:80px;
+    text-align: center;
+    width:142px;
+    margin-bottom: 5px;
+    border: 2px solid black; 
+}
+
+.description_box
+{
+    margin-left:50px;
+    width:133px;
+    vertical-align:top;
+    margin-bottom: 5px;
+}
+
+.form_submit_button
+{
+    width:75px;
+}
+
+.form_cancel_button
+{
+    width:55px;
+    margin-left:122px;
+}
+
+label
+{
+    margin-left: 11px;
+}
+
+#update_form_div
+{
+    border: 2px, black, solid;
+    background-color: white;
+    border-radius: 10px;
+    width:300px;
+    padding:2px;
+    margin-bottom: 10px;
+    border: 2px solid black; 
+}
+
+#createForm
+{
+    border: 2px, black, solid;
+    background-color: white;
+    border-radius: 10px;
+    width:300px;
+    padding:2px;
+    margin-bottom: 10px;
+    border: 2px solid black; 
 }
