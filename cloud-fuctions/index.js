@@ -8,19 +8,6 @@ import mysql from 'mysql2/promise';
 const app = express();
 app.use(bodyParser.json());
 
-// HELPER FUNCTIONS:
-
-// verifies the jwt
-function verifyJWT(token, uid) {
-    try {
-        const decoded = jwt.verify(token, MY_JWT_SECRET);
-        return decoded.userID === uid;
-    } catch (error) {
-        console.error('JWT Verification Error:', error);
-        return false;
-    }
-}
-
 
 // CLOUD FUNCTIONS:
 
@@ -109,74 +96,92 @@ app.post('/login', async (req, res) => {
 
 app.post('/createEvent', async (req, res) => {
 
-    const { jwt: token, uid, starttime, endtime, name, desc, priority, eid } = req.body;
+    const { jwtToken, uid, starttime, endtime, date, name, desc, priority} = req.body;
 
-    // Verify JWT
-    if (!verifyJWT(token, uid)) {
-        return res.status(401).json({ success: false });
-    }
+    // verify JWT
+    try {
+        const client = new SecretManagerServiceClient();
+        const [version] = await client.accessSecretVersion({
+            name: 'projects/276748369389/secrets/jwt-secret/versions/latest'
+        });
+        const MY_JWT_SECRET = version.payload.data.toString('utf8');
 
-    pool.getConnection((err, connection) => {
-        if (err) {
-            reject(err);
+        const decoded = jwt.verify(jwtToken, MY_JWT_SECRET);
+        if (decoded.id !== uid) {
+            res.status(403).json({ success: false, message: 'Unauthorized' , jwtPayload: decoded, uid: uid});
             return;
         }
-        const config = {
-            user: 'developer',
-            password: 'cs1660',
-            database: 'user_info',
-            socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-        };
-        connection.query('INSERT INTO events (starttime, endtime, name, desc, priority, eid) VALUES (?, ?, ?, ?, ?, ?)', [starttime, endtime, name, desc, priority, eid], (error, results) => {
-            connection.release(); // Release connection back to the pool
+    } catch (error) {
+        res.status(401).json({ success: false, error: error });
+        return;
+    }
 
-            if (error) {
-                console.error('Error executing SQL query:', error);
-                return res.status(500).json({ error: 'Failed to create event' });
-            }
-
-            // Event creation successful
-            res.status(200).json({ success: true });
-        });
+    // connect to cloud database
+    const pool = mysql.createPool({
+        user: 'developer',
+        password: 'cs1660',
+        database: 'user_info',
+        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase'
     });
 
+    try{
+        const conn = await pool.getConnection();
+        const queryText = `INSERT INTO task_info (UserID, StartTime, EndTime, TaskName, Description, Date, Priority) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const [results] = await conn.query(queryText, [uid, starttime, endtime, name, desc, date, priority]);
+        conn.release();
 
-    return res.json({ success: true });
+        res.status(200).json({ success: true })
+
+    } catch (error){
+        console.error('Database error:', dbError);
+        res.status(500).json({ success: false, message: error });
+    }
 });
 
 app.post('/updateEvent', async (req, res) => {
 
-    const { jwt: token, uid, starttime, endtime, name, desc, priority, eid } = req.body;
+    const { jwtToken, uid, starttime, endtime, date, name, desc, priority, eid} = req.body;
 
-    // Verify JWT
-    if (!verifyJWT(token, uid)) {
-        return res.status(401).json({ success: false });
-    }
+    // verify JWT
+    try {
+        const client = new SecretManagerServiceClient();
+        const [version] = await client.accessSecretVersion({
+            name: 'projects/276748369389/secrets/jwt-secret/versions/latest'
+        });
+        const MY_JWT_SECRET = version.payload.data.toString('utf8');
 
-    pool.getConnection((err, connection) => {
-        if (err) {
-            reject(err);
+        const decoded = jwt.verify(jwtToken, MY_JWT_SECRET);
+        if (decoded.id !== uid) {
+            res.status(403).json({ success: false, message: 'Unauthorized' , jwtPayload: decoded, uid: uid});
             return;
         }
-        const config = {
-            user: 'developer',
-            password: 'cs1660',
-            database: 'user_info',
-            socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-        };
-        connection.query('UPDATE events SET starttime = ?, endtime = ?, name = ?, description = ?, priority = ? WHERE eid = ? AND uid = ?', [starttime, endtime, name, desc, priority, eid], (error, results) => {
-            connection.release(); // Release connection back to the pool
+    } catch (error) {
+        res.status(401).json({ success: false, error: error });
+        return;
+    }
 
-            if (error) {
-                console.error('Error executing SQL query:', error);
-                return res.status(500).json({ error: 'Failed to update event' });
-            }
 
-            // Event update successful
-            res.status(200).json({ success: true });
-        });
+    // connect to cloud database
+    const pool = mysql.createPool({
+        user: 'developer',
+        password: 'cs1660',
+        database: 'user_info',
+        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase'
     });
-    return res.json({ success: true });
+
+    try{
+        const conn = await pool.getConnection();
+        const queryText = `UPDATE task_info SET StartTime = ?, EndTime = ?, TaskName = ?, Description = ?, Date = ?, priority = ? WHERE taskID = ? AND userID = ?`;
+        const [results] = await conn.query(queryText, [starttime, endtime, name, desc, date, priority, eid, uid]);
+        conn.release();
+
+        res.status(200).json({ success: true })
+
+    } catch (error){
+        console.error('Database error:', dbError);
+        res.status(500).json({ success: false, message: error });
+    }
+
 });
 
 app.post('/deleteEvent', async (req, res) => {
