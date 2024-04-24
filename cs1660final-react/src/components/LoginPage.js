@@ -32,6 +32,8 @@ const LoginPage = () => {
     }
     if (isRegistering) {
       let response = await apiCallRegister(username, password, firstName, lastName, email);
+      console.log(response)
+      console.log(response.success)
       if (response.success) {
         setIsRegistering(false);
         setMessage('Registration successful! Please login.');

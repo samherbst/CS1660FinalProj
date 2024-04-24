@@ -27,11 +27,7 @@ const Home = () => {
 
     const uid = user.uid;
     const username = user.username;
-    const fname = user.fname;
-    const lname = user.lname;
     const apiJwt = user.jwt;
-
-    //console.log("Welcoming user: " + fname + " " + lname + " with username: " + username + " to the homepage")
 
     const handleLogout = () => {
         navigate('/');
@@ -43,7 +39,7 @@ const Home = () => {
     return (
         <div className='home-page'>
             <div id='welcome'>
-                <h2>Welcome {fname}</h2>
+                <h2>Welcome {username}</h2>
             </div>
             <button id="logout" onClick={handleLogout}>Logout</button>
             <div className='calendar'>
