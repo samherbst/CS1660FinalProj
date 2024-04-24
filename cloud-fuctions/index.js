@@ -55,7 +55,7 @@ app.post('/register', async (req, res) => {
  * credentials (username and password). The username and password are checked against
  * the username and passwords stored within the database of valid accounts.  If the
  * username and its associated password is not found within the database, then the
- * the authencation fails and the user will not be able to login.  If the username and
+ * authencation fails and the user will not be able to login.  If the username and
  * its associated password is found, then the user will be authenticated and they will
  * be able to login to their account.  The user once authenticated is issued a JWT for
  * 24hrs and once the 24hrs expire, the user will have to reauthenticate their account
