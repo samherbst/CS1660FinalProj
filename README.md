@@ -1,5 +1,6 @@
 # CS1660FinalProj
 ## Overview: <br>
+This project was focused on developing a user-friendly task scheduling application where users can create new tasks with descriptions, date, start-time, end-time and priority levels. The application also facilitates task deletion and modification, ensuring users can maintain a dynamic and up-to-date schedule. Furthermore, the application functions on an account-based system. This requires users to create an account for access and management of tasks.
 ## Google Cloud Services Used: <br>
 ## Division of Work: <br>
 > **Shivani Praveen**: I helped establish the project's data foundation by utilizing Google Cloud SQL to design and implement a relational database for storing the user and task information by defining the database schema and creating the necessary tables within the Cloud SQL database. <br> <br>
