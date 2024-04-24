@@ -11,8 +11,16 @@ app.use(bodyParser.json());
 
 // CLOUD FUNCTIONS:
 
+/**
+ * Description: Handles HTTP POST requests to '/register' endpoint for user registration.
+ * This function allows new users to create an account on the website by providing their
+ * desired credentials(username and password) and then they are stored securely in the 
+ * database.
+ * 
+ * @param {Object} req - The HTTP request object containing user input data.
+ * @param {Object} res - The HTTP response object for sending back a response to the client.
+ */
 app.post('/register', async (req, res) => {
-
     res.set('Access-Control-Allow-Origin', "*");
     res.set('Access-Control-Allow-Methods', 'GET, POST');
 
@@ -41,7 +49,22 @@ app.post('/register', async (req, res) => {
     }
 });
 
-
+/**
+ * Description: Handles HTTP POST requests to '/login' endpoint for user authentication.
+ * This function allows users to login to their created account with their unique 
+ * credentials (username and password). The username and password are checked against
+ * the username and passwords stored within the database of valid accounts.  If the
+ * username and its associated password is not found within the database, then the
+ * the authencation fails and the user will not be able to login.  If the username and
+ * its associated password is found, then the user will be authenticated and they will
+ * be able to login to their account.  The user once authenticated is issued a JWT for
+ * 24hrs and once the 24hrs expire, the user will have to reauthenticate their account
+ * by logging in with valid credentials.  Then they will be reissued a new JWT token
+ * if their account is properly authenticated.
+ * 
+ * @param {Object} req - The HTTP request object containing user input data.
+ * @param {Object} res - The HTTP response object for sending back a response to the client.
+ */
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -93,9 +116,15 @@ app.post('/login', async (req, res) => {
         if (conn) conn.release();
     }
 });
-
+/**
+ * Description: Handles HTTP POST requests to '/createEvent' endpoint for a user to create
+ * events.  This function allows a authenticated user to create an event and store it  
+ * in the database.
+ * 
+ * @param {Object} req - The HTTP request object containing user input data.
+ * @param {Object} res - The HTTP response object for sending back a response to the client.
+ */
 app.post('/createEvent', async (req, res) => {
-
     const { jwtToken, uid, starttime, endtime, date, name, desc, priority} = req.body;
 
     // verify JWT
@@ -137,7 +166,14 @@ app.post('/createEvent', async (req, res) => {
         res.status(500).json({ success: false, message: error });
     }
 });
-
+/**
+ * Description: Handles HTTP POST requests to '/updateEvent' endpoint for a user
+ * to update events.  This function allows a authenticated user to update an existing
+ * event and then store it in the database.
+ * 
+ * @param {Object} req - The HTTP request object containing user input data.
+ * @param {Object} res - The HTTP response object for sending back a response to the client.
+ */
 app.post('/updateEvent', async (req, res) => {
 
     const { jwtToken, uid, starttime, endtime, date, name, desc, priority, eid} = req.body;
@@ -183,9 +219,15 @@ app.post('/updateEvent', async (req, res) => {
     }
 
 });
-
+/**
+ * Description: Handles HTTP POST requests to '/deleteEvent' endpoint for a user
+ * to delete events.  This function allows a authenticated user to delete an existing
+ * event by removing it from the database.
+ * 
+ * @param {Object} req - The HTTP request object containing user input data.
+ * @param {Object} res - The HTTP response object for sending back a response to the client.
+ */
 app.post('/deleteEvent', async (req, res) => {
-
     const { jwtToken, uid, eid } = req.body;
 
     // verify JWT
@@ -229,7 +271,14 @@ app.post('/deleteEvent', async (req, res) => {
 
 });
 
-
+/**
+ * Description: Handles HTTP POST requests to '/getEvents' endpoint for user events.
+ * This function allows an authenticated user to view all the events they have 
+ * previously created which are stored in the database.
+ * 
+ * @param {Object} req - The HTTP request object containing user input data.
+ * @param {Object} res - The HTTP response object for sending back a response to the client.
+ */
 app.post('/getEvents', async (req, res) => {
 
     const { jwtToken, uid } = req.body;
