@@ -1,0 +1,46 @@
+.dayBox {
+    border: 1px solid black;
+    width: 100px;
+    height: 100px;
+    float: left;
+    text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    border-radius: 4px;
+    background-color: lightgrey;
+}
+
+#dayNum {
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    line-height: normal;
+}
+
+#eventText {
+    position: absolute;
+    top: 14%;
+    left: 17%;
+    margin-top: 5%;
+    font-size: 0.8em;
+}
+
+.pri_box{
+    width: 110%;
+    margin-bottom: 2%;
+    border-radius: 10px; /* Adjust this value as needed */
+}
+
+#high_priority {
+    background-color: red;
+}
+
+#medium_priority {
+    background-color: orange;
+}
+
+#low_priority {
+    background-color: green;
+}

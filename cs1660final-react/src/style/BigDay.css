@@ -1,0 +1,149 @@
+.bigDayBox {
+    position: absolute;
+    border: 1px solid black;
+    margin-top: 12%;
+    margin-left: 25%;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 70%;
+    z-index: 1;
+    background: grey;
+    border-radius: 10px;
+    padding:5px;
+}
+
+#title_big_day {
+    text-align: center;
+    margin-top: 5%;
+}
+
+#bigDayEvents {
+    max-height: 55vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-left: 21%;
+    padding-right:20%;
+}
+
+.priority {
+    width: 114%;
+    padding: 1%;
+    border-radius: 6px;
+    margin-bottom: 100px;
+}
+
+#update_form_div strong
+{
+    border: 1px solid black; 
+    padding-left: 1px;
+}
+
+#event_text
+{
+    text-align: center;
+}
+
+#H {
+    background-color: red;
+}
+
+#M {
+    background-color: orange;
+}
+
+#L {
+    background-color: green;
+}
+
+#doneButton 
+{
+    float: right;
+    margin-right: 5%;
+}
+
+#create_event_button
+{
+    margin-left:34%;
+    margin-bottom:3%;
+}
+
+#delete_button
+{
+    margin-left:34%;
+}
+
+.start_time_drop_down
+{
+    margin-left: 59px;
+    margin-bottom: 5px;
+}
+
+.end_time_drop_down
+{
+    margin-left: 65px;
+    margin-bottom: 5px;
+}
+
+.form_name
+{
+    margin-left:88px;
+    width:133px;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.prioritybox
+{
+    margin-left:80px;
+    text-align: center;
+    width:142px;
+    margin-bottom: 5px;
+    border: 2px solid black; 
+}
+
+.description_box
+{
+    margin-left:50px;
+    width:133px;
+    vertical-align:top;
+    margin-bottom: 5px;
+}
+
+.form_submit_button
+{
+    width:75px;
+}
+
+.form_cancel_button
+{
+    width:55px;
+    margin-left:122px;
+}
+
+label
+{
+    margin-left: 11px;
+}
+
+#update_form_div
+{
+    border: 2px, black, solid;
+    background-color: white;
+    border-radius: 10px;
+    width:300px;
+    padding:2px;
+    margin-bottom: 10px;
+    border: 2px solid black; 
+}
+
+#createForm
+{
+    border: 2px, black, solid;
+    background-color: white;
+    border-radius: 10px;
+    width:300px;
+    padding:2px;
+    margin-bottom: 10px;
+    border: 2px solid black; 
+}

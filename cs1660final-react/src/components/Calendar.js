@@ -3,15 +3,6 @@ import '../style/Calendar.css';
 
 import Day from './Day';
 
-// function getEventsForDay(events = [], date) {
-//     // return events.filter(event => {
-//     //     // const eventDate = new Date(event.date * 1000);
-//     //     // return eventDate.getDate() === date.getDate() &&
-//     //     //     eventDate.getMonth() === date.getMonth() &&
-//     //     //     eventDate.getFullYear() === date.getFullYear();
-//     // });
-// }
-
 function monthToWord(month) {
     switch(month) {
         case 0:
@@ -43,11 +34,7 @@ function monthToWord(month) {
     }
 }
 
-const Calendar = (props) => {
-    for (let i = 0; i < props.events.length; i++) {
-        console.log("Event: ", props.events[i])
-    }
-
+const Calendar = (props) => { 
     // get current date
     let today = new Date();
     let currMonth = monthToWord(today.getMonth()) + " " + today.getFullYear();
@@ -55,28 +42,38 @@ const Calendar = (props) => {
     const dates = [];
     const daysInMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
   
-    for (let i = 1; i <= daysInMonth; i++) {
-      dates.push(new Date(today.getFullYear(), today.getMonth(), i));
-    }
-  
     const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   
     // Find the day of the week for the first day of the month
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
   
+    for (let i = 1; i <= daysInMonth; i++) {
+        const currentDate = new Date(today.getFullYear(), today.getMonth(), i);
+        const eventsOnThisDay = props.events.filter(event => {
+            const eventDate = new Date(event.starttime * 1000); // Convert to milliseconds
+            return eventDate.getFullYear() === currentDate.getFullYear() &&
+                eventDate.getMonth() === currentDate.getMonth() &&
+                eventDate.getDate() === currentDate.getDate();
+        });
+        dates.push({
+            date: currentDate,
+            events: eventsOnThisDay
+        });
+    }
+
     return (
-      <div className="calendar">
-        <h3>{currMonth}</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
-          {daysOfWeek.map((day, index) => (
-            <div key={index}>{day}</div>
-          ))}
-          {Array(firstDayOfMonth).fill(null).map((_, index) => <div key={index} />)}
-          {dates.map((date, index) => (
-            <Day key={index + firstDayOfMonth} date={date} />
-          ))}
+        <div>
+            <h3>{currMonth}</h3>
+            <div className="calendar" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)' }}>
+                {daysOfWeek.map((day, index) => (
+                    <div key={index}>{day}</div>
+                ))}
+                {Array(firstDayOfMonth).fill(null).map((_, index) => <div key={index} />)}
+                {dates.map((dateObj, index) => (
+                    <Day key={index + firstDayOfMonth} date={dateObj.date} events={dateObj.events} dayClick={props.onDayClick}/>
+                ))}
+            </div>
         </div>
-      </div>
     );
   };
 
