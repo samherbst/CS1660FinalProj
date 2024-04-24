@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - Owen-reactstuff
 
 jobs:
   build:
