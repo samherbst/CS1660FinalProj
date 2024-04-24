@@ -232,37 +232,47 @@ app.post('/deleteEvent', async (req, res) => {
 
 app.post('/getEvents', async (req, res) => {
 
-    const { jwt: token, uid } = req.body;
+    const { jwtToken, uid } = req.body;
 
-    // Verify JWT
-    if (!verifyJWT(token, uid)) {
-        return res.status(401).json({ success: false });
-    }
+    // verify JWT
+    try {
+        const client = new SecretManagerServiceClient();
+        const [version] = await client.accessSecretVersion({
+            name: 'projects/276748369389/secrets/jwt-secret/versions/latest'
+        });
+        const MY_JWT_SECRET = version.payload.data.toString('utf8');
 
-    pool.getConnection((err, connection) => {
-        if (err) {
-            reject(err);
+        const decoded = jwt.verify(jwtToken, MY_JWT_SECRET);
+        if (decoded.id !== uid) {
+            res.status(403).json({ success: false, message: 'Unauthorized' , jwtPayload: decoded, uid: uid});
             return;
         }
-        const config = {
-            user: 'developer',
-            password: 'cs1660',
-            database: 'user_info',
-            socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase',
-        };
-        connection.query('SELECT * FROM events WHERE uid = ?', [uid], (error, results) => {
-            connection.release(); // Release connection back to the pool
+    } catch (error) {
+        res.status(401).json({ success: false, error: error });
+        return;
+    }
 
-            if (error) {
-                console.error('Error executing SQL query:', error);
-                return res.status(500).json({ error: 'Failed to retrieve events' });
-            }
-
-            // Event retrieval successful
-            res.status(200).json({ success: true });
-        });
+    // connect to cloud database
+    const pool = mysql.createPool({
+        user: 'developer',
+        password: 'cs1660',
+        database: 'user_info',
+        socketPath: '/cloudsql/cs1660-finalproj:us-east1:taskdatabase'
     });
-    return res.json({ success: true });
+
+    try{
+        const conn = await pool.getConnection();
+        const queryText = `SELECT taskID AS eid, StartTime AS starttime, EndTime AS endtime, Date, TaskName AS name, Description AS descr, priority FROM task_info WHERE userID = ?`;
+        const [events] = await conn.query(queryText, [uid]);
+        conn.release();
+
+        res.status(200).json({ eventlist: events })
+
+    } catch (error){
+        console.error('Database error:', dbError);
+        res.status(500).json({ success: false, message: error });
+    }
+
 });
 
 export const register = functions.https.onRequest(app);
