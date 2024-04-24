@@ -10,15 +10,18 @@ jobs:
     runs-on: ubuntu-latest  
 
     steps:
-      - name: Checkout repository  
+      - name: Checkout repository 
         uses: actions/checkout@v2  
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
 
       - name: Install dependencies  
         run: |
-          cd cs1660final-react
-          npm install  
+          cd cs1660final-react && npm install  
 
       - name: Build  
         run: |
-          cd cs1660final-react
-          npm run build  
+          cd cs1660final-react && npm run build  
