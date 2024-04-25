@@ -17,10 +17,11 @@ This project was focused on developing a user-friendly task scheduling applicati
 
 **Google App Engine:**:  We used Google App Engine to deploy our React application.  App Engine is a Platform as a Service (PaaS) which made hosting our application much more convenient the using Google Cloud Engine.  If we alternatively used Cloud Engine, we would have had to spend much more time configuring our deployment.  With App Engine, we simply needed to clone our repositoty and specify which version of Node.js we were using.  
 >Steps:
->1.) Cloned our repository into GCP
->2.) Did proper npm installation
->3.) Ran npm build bundle, compile, and optimize our source code
+>1.) Cloned our repository into GCP<br>
+>2.) Did proper npm installation<br>
+>3.) Ran npm build bundle, compile, and optimize our source code<br>
 >5.) Deployed our application
+<br><br>
 
 **Secret Manager**: Utilized gcp's secret manager to securely store our java web token secret. This allowed us to access the secret whenever we needed to sign and create jwts to provided users logging in to the application to them with proper authentication. The secret manager allowed us to have a centralized spot to securely store the secret where we could manage access and could integrate with other cloud services.
 <br><br> 
