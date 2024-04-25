@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-
 import { apiCallToGetEvents } from '../function_calls.js';
 import Calendar from './Calendar';
 import BigDay from './BigDay';
-
 import '../style/Home.css';
 
 const Home = () => {
@@ -12,6 +10,29 @@ const Home = () => {
     const [bigDayProps, setBigDayProps] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const [events, setEvents] = useState([]);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const user = location.state.user;
+    const uid = user.uid;
+    const username = user.username;
+    const apiJwt = user.jwt;
+
+    const fetchEvents = useCallback(async () => {
+        try {
+            const events = await apiCallToGetEvents(uid, apiJwt);
+            setEvents(events);
+            setIsLoading(false);
+        } catch (error) {
+            console.error('Error fetching events:', error);
+            setIsLoading(false);
+        }
+    }, [apiJwt, uid]);
+
+    useEffect(() => {
+        fetchEvents();
+
+    }, [fetchEvents]); // Include fetchEvents in the dependency array
 
     const handleDayClick = (date, dayEvents) => {
         setBigDayProps({ date, dayEvents });
@@ -22,34 +43,8 @@ const Home = () => {
         setShowBigDay(false);
     };
 
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    const user = location.state.user;
-
-    const uid = user.uid;
-    const username = user.username;
-    const apiJwt = user.jwt;
-
-    /* eslint-enable react-hooks/exhaustive-deps */
-    const fetchEvents = async () => {
-        const events = await getEvents(apiJwt, uid);
-        setEvents(events);
-        setIsLoading(false);
-    };
-    useEffect(() => {
-        fetchEvents();
-    }, [apiJwt, uid, fetchEvents]);
     const handleLogout = () => {
         navigate('/');
-    };
-    /* eslint-enable react-hooks/exhaustive-deps */
-
-    const getEvents = async (apiJwt, uid) => {
-        const events = await apiCallToGetEvents(uid, apiJwt);
-        // console.log("debug");
-        // console.log(events.eventlist);
-        return events;
     };
 
     return (

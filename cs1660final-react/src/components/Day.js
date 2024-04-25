@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { apiCallToGetEvents } from '../function_calls';
-
 import '../style/Day.css';
 
 const Day = ({ date, events = [], dayClick }) => {
