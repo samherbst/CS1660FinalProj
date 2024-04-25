@@ -15,12 +15,14 @@ This project was focused on developing a user-friendly task scheduling applicati
 > **/getEvents:** Handles HTTP POST requests to '/getEvents' endpoint for user events. This function allows an authenticated user to view all the events they have previously created which are stored in the database.
 <br><br>
 
-**Google App Engine:**:  We used Google App Engine to deploy our React application.  App Engine is a Platform as a Service (PaaS) which made hosting our application much more convenient the using Google Cloud Engine.  If we alternatively used Cloud Engine, we would have had to spend much more time configuring our deployment.  With App Engine, we simply needed to clone our repositoty and specify which version of Node.js we were using.  
->Steps:<br>
+**Google App Engine:**:  We used Google App Engine to deploy our React application.  App Engine is a Platform as a Service (PaaS) which made hosting our application much more convenient the using Google Cloud Engine.  If we alternatively used Cloud Engine, we would have had to spend much more time configuring our deployment.  With App Engine, we simply needed to clone our repositoty and specify which version of Node.js we were using.
+> The react app hosted witht the Google app engine was build using node.js20 and react 17. On the app, a user can create an account, log in, and create their schedule. The app provides this functionality by making api calls to the functions above.<br>
+>Deployment Steps:<br>
 >1.) Cloned our repository into GCP<br>
 >2.) Did proper npm installation<br>
 >3.) Ran "npm build" to bundle, compile, and optimize our source code<br>
->5.) Deployed our application
+>5.) Deployed our application<br>
+> We also decided to introduce some automation into our build pipeline such that we could improve the development process. Using github actions, we introduced continuous integration so that every time there are pushes to the main branch or owen-reactstuff (the primary frontend branch), there is an automatic build. This limits the amount of files we have to transport to and store in the app engine when changes are made. Also, since the main.yaml specification for our CI uses npm build, it fails when the linters give warnings or the build tool gives errors, serving as a safety check alerting us of these errors and sending everyone on the team an email that the build has failed.
 <br><br>
 
 **Secret Manager**: Utilized gcp's secret manager to securely store our java web token secret. This allowed us to access the secret whenever we needed to sign and create jwts to provided users logging in to the application to them with proper authentication. The secret manager allowed us to have a centralized spot to securely store the secret where we could manage access and could integrate with other cloud services.
