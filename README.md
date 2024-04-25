@@ -15,6 +15,10 @@ This project was focused on developing a user-friendly task scheduling applicati
 > **/getEvents:** Handles HTTP POST requests to '/getEvents' endpoint for user events. This function allows an authenticated user to view all the events they have previously created which are stored in the database.
 <br><br>
 
+**Secret Manager**: Utilized gcp's secret manager to securely store our java web token secret. This allowed us to access the secret whenever we needed to sign and create jwts to provided users logging in to the application to them with proper authentication. The secret manager allowed us to have a centralized spot to securely store the secret where we could manage access and could integrate with other cloud services.
+<br><br> 
+
+
 ## Division of Work: <br>
 > **Shivani Praveen**: I helped establish the project's data foundation by utilizing Google Cloud SQL to design and implement a relational database for storing the user and task information by defining the database schema and creating the necessary tables within the Cloud SQL database. <br> <br>
 > **Sam Herbst**: Wrote, deployed, tested cloud functions using the Google Cloud Function service. This involved ensuring http access to the functions to allow the frontend of our project to call and execture the functions. They needed to take input from frontend requests and then query the database to perform certain actions and return the necessary information. This also involved creating a jwt secret, verifying and creating jwt tokens, and managing authorization for requests using Google Cloud's Secret Manager Service. Lastly, I had to ensure that our functions aligned with the database schema that we had created. I tested this part by using Cloud SQL studio to ensure our database was working properly with the querys I needed to perform as well as using Postman to ensure the functions could execute and return to correct information from the frontends perspective. Overall, by implementing and testing these functions I created an API service that allowed our frontend user interface to communicate with and query our SQL databse. <br> <br>
