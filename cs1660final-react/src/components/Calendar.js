@@ -49,11 +49,16 @@ const Calendar = (props) => {
   
     for (let i = 1; i <= daysInMonth; i++) {
         const currentDate = new Date(today.getFullYear(), today.getMonth(), i);
-        const eventsOnThisDay = props.events.filter(event => {
-            const eventDate = new Date(event.starttime * 1000); // Convert to milliseconds
-            return eventDate.getFullYear() === currentDate.getFullYear() &&
-                eventDate.getMonth() === currentDate.getMonth() &&
-                eventDate.getDate() === currentDate.getDate();
+        const currentDateStr = currentDate.toISOString().split('T')[0];
+        // console.log(currentDateStr);
+        // console.log(props.events)
+        const eventsOnThisDay = props.events.eventlist.filter(event => {
+            // console.log("hello");
+            // console.log(event.Date)
+            const eventDate = new Date(event.Date);
+            const eventDateStr = eventDate.toISOString().split('T')[0];
+            // console.log(eventDateStr);
+            return eventDateStr === currentDateStr;
         });
         dates.push({
             date: currentDate,
