@@ -16,7 +16,7 @@ This project was focused on developing a user-friendly task scheduling applicati
 <br><br>
 
 **Google App Engine:**:  We used Google App Engine to deploy our React application.  App Engine is a Platform as a Service (PaaS) which made hosting our application much more convenient the using Google Cloud Engine.  If we alternatively used Cloud Engine, we would have had to spend much more time configuring our deployment.  With App Engine, we simply needed to clone our repositoty and specify which version of Node.js we were using.  
->Steps:
+>Steps:<br>
 >1.) Cloned our repository into GCP<br>
 >2.) Did proper npm installation<br>
 >3.) Ran npm build bundle, compile, and optimize our source code<br>
