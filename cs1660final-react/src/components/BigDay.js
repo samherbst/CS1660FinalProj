@@ -7,35 +7,52 @@ import '../style/BigDay.css';
 
 import { apiCallToChangeEvent, apiCallToCreateEvent, apiCallToDeleteEvent } from '../function_calls';
 
-const BigDay = ({ date, dayEvents, onClose, user }) => {
+const BigDay = ({ date, dayEvents, onClose, user, fetchEvents }) => {
     const [createFormOpen, setCreateFormOpen] = useState(false);
     const [currentEvent, setCurrentEvent] = useState(null);
+    // const [currentId, setCurrentId] = useState(null);
     const [updateFormOpen, setUpdateFormOpen] = useState(false);
-    const [updatedEvent, setUpdatedEvent] = useState({
-        starttime: 0,
-        endtime: 0,
-        name: '',
-        desc: '',
-        priority: 'H'
-    });
+    // const [updatedEvent, setUpdatedEvent] = useState({
+    //     starttime: 0,
+    //     endtime: 0,
+    //     name: '',
+    //     desc: '',
+    //     priority: 'H',
+    //     eid: 0
+    // });
 
-    const doUpdate = (event) => {
-        setUpdateFormOpen(true);
-        setCurrentEvent(event);
-        setUpdatedEvent({
-            starttime: event.starttime,
-            endtime: event.endtime,
-            name: event.name,
-            desc: event.desc,
-            priority: event.priority
-        });
-    }
-
-    const handleUpdateEvent = (event) => {
-        event.preventDefault();
-
-        apiCallToChangeEvent(user.uid, user.jwt, currentEvent.eid, updatedEvent);
+    const handleUpdateEvent = async (formEvent,eid) => {
+        formEvent.preventDefault();
         
+        const form = formEvent.target;
+
+        let hours = form.startHour.value;
+        let minutes = form.startMinute.value;
+        let ampm = form.startAMPM.value;
+        const starttime = convertToTime(hours, minutes, ampm);
+
+        hours = form.endHour.value;
+        minutes = form.endMinute.value;
+        ampm = form.endAMPM.value;
+
+        const endtime = convertToTime(hours, minutes, ampm);
+
+        const updateEvent = {
+            eid: eid,
+            uid: user.uid,
+            jwtToken: user.jwt,
+            starttime: starttime,
+            endtime: endtime,
+            date: date.toISOString().split('T')[0],
+            name: form.name.value,
+            desc: form.desc.value,
+            priority: form.priority.value
+        };
+
+
+        await apiCallToChangeEvent(updateEvent);
+
+        fetchEvents();
         setCurrentEvent(null);
         setUpdateFormOpen(false);
         // Optionally, you can refresh the events list here
@@ -49,32 +66,55 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
         event.stopPropagation();
         onClose();
     };
-    const doDelete = (eid) => {
-        apiCallToDeleteEvent(user.uid, user.jwt, eid);
+
+    const doDelete = async (eid) => {
+        console.log("deleting event ", eid)
+        await apiCallToDeleteEvent(user.uid, user.jwt, eid);
+
+        fetchEvents();
+        setCurrentEvent(null);
+        setUpdateFormOpen(false);
     }
 
-    const handleCreateEvent = (event) => {
+    const handleCreateEvent = async (event) => {
         event.preventDefault();
         const form = event.target;
 
-        console.log()
+        let hours = form.startHour.value;
+        let minutes = form.startMinute.value;
+        let ampm = form.startAMPM.value;
+        const starttime = convertToTime(hours, minutes, ampm);
+
+        hours = form.endHour.value;
+        minutes = form.endMinute.value;
+        ampm = form.endAMPM.value;
+
+        const endtime = convertToTime(hours, minutes, ampm);
 
         const newEvent = {
-            starttime: parseInt(form.starttime.value),
-            endtime: parseInt(form.endtime.value),
+            uid: user.uid,
+            jwtToken: user.jwt,
+            starttime: starttime,
+            endtime: endtime,
+            date: date.toISOString().split('T')[0],
             name: form.name.value,
             desc: form.desc.value,
             priority: form.priority.value
         };
 
-        apiCallToCreateEvent(user.uid, user.jwt, newEvent);
+        await apiCallToCreateEvent(newEvent);
+        fetchEvents();
+        setCreateFormOpen(false);
     }
 
-    function convertToEpoch (date, hour, minute, ampm) {
-        date.setHours(hour + (ampm === 'PM' ? 12 : 0));
-        date.setMinutes(minute);
-        date.setSeconds(0);
-        return Math.floor(date.getTime());
+    function convertToTime(hour, minute, ampm) {
+        let hours = parseInt(hour);
+        const minutes = parseInt(minute);
+        if (ampm === 'PM') {
+            hours += 12;
+        }
+
+        return hours + minutes + '00';
     }
 
     function convertFromEpoch(epoch) {
@@ -100,6 +140,16 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
             minutes,
             ampm
         };
+    }
+
+    function timeToEpoch(time) {
+        const date = new Date();
+        const hours = parseInt(time.substring(0, 2));
+        const minutes = parseInt(time.substring(3, 5));
+        date.setHours(hours)
+        date.setMinutes(minutes);
+        date.setSeconds(0);
+        return Math.floor(date.getTime());
     }
 
     const convertEpochToTime = (epoch) => {
@@ -197,8 +247,8 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
             {sortedEvents.map((event, index) => ( 
                 event && <div id = "update_form_div" key={index}>
                     <p id = "event_text"><strong class ="priority" id={event.priority}>{event.name}</strong><br />
-                    {convertEpochToTime(event.starttime)} - {convertEpochToTime(event.endtime)}<br />
-                    {event.desc}
+                    {   convertEpochToTime(timeToEpoch(event.starttime))} - {convertEpochToTime(timeToEpoch(event.endtime))}<br />
+                    {event.descr}
                     </p>
 
                     {(!updateFormOpen || currentEvent.eid !== event.id) && 
@@ -206,7 +256,7 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                         {!updateFormOpen && 
                             <div>
                                 <button id = "delete_button" onClick={() => doDelete(event.eid)}>Delete</button>
-                                <button id = "update_button" onClick={() => doUpdate(event)}>Update</button>
+                                {/* <button id = "update_button" onClick={() => doUpdate(event, event.eid)}>Update</button> */}
                             </div>
                         }
                     </div>
@@ -220,49 +270,49 @@ const BigDay = ({ date, dayEvents, onClose, user }) => {
                             </label>
                             <label>
                         Start Time:
-                        <select class = "start_time_drop_down" name="startHour" defaultValue={convertFromEpoch(event.starttime).hours}>
+                        <select class = "start_time_drop_down" name="startHour" defaultValue={convertFromEpoch(timeToEpoch(event.starttime)).hours}>
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
                                 </option>
                             ))}
                         </select>:
-                        <select name="startMinute" defaultValue={convertFromEpoch(event.starttime).minutes}>
+                        <select name="startMinute" defaultValue={convertFromEpoch(timeToEpoch(event.starttime)).minutes}>
                             {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
                                 <option key={minute} value={minute.toString().padStart(2, '0')}>
                                     {minute.toString().padStart(2, '0')}
                                 </option>
                             ))}
                         </select>
-                        <select name="startAMPM" defaultValue={convertFromEpoch(event.starttime).ampm}>
+                        <select name="startAMPM" defaultValue={convertFromEpoch(timeToEpoch(event.starttime)).ampm}>
                             <option value="AM">AM</option>
                             <option value="PM">PM</option>
                         </select>
                     </label>
                     <label>
                         End Time:
-                        <select class = "end_time_drop_down" name="endHour" defaultValue={convertFromEpoch(event.endtime).hours}>
+                        <select class = "end_time_drop_down" name="endHour" defaultValue={convertFromEpoch(timeToEpoch(event.endtime)).hours}>
                             {Array.from({ length: 12 }, (_, i) => i + 1).map((hour) => (
                                 <option key={hour}>
                                     {hour}
                                 </option>
                             ))}
                         </select>:
-                        <select name="endMinute" defaultValue={convertFromEpoch(event.endtime).minutes}>
+                        <select name="endMinute" defaultValue={convertFromEpoch(timeToEpoch(event.endtime)).minutes}>
                             {Array.from({ length: 60 }, (_, i) => i).map((minute) => (
                                 <option key={minute} value={minute.toString().padStart(2, '0')}>
                                     {minute.toString().padStart(2, '0')}
                                 </option>
                             ))}
                         </select>
-                        <select name="endAMPM" defaultValue={convertFromEpoch(event.endtime).ampm}>
+                        <select name="endAMPM" defaultValue={convertFromEpoch(timeToEpoch(event.endtime)).ampm}>
                             <option value="AM">AM</option>
                             <option value="PM">PM</option>
                         </select>
                     </label>
                             <label>
                                 Description:
-                                <textarea class="description_box" name="desc" rows="4" cols="50"></textarea>
+                                <textarea class="description_box" name="desc" rows="4" cols="50" defaultValue={currentEvent.descr}></textarea>
                             </label>
                             <label>
                                 Priority:

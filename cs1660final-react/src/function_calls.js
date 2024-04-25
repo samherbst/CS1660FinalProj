@@ -1,6 +1,4 @@
-// file to create functions that make calls to the apis so that 
-
-import {testData, user} from './testData.js';
+// file to create functions that make calls to the apis so that the main code is cleaner
 
 const url = "https://us-central1-cs1660-finalproj.cloudfunctions.net"
 
@@ -68,17 +66,27 @@ export async function apiCallRegister(username, password, fname, lname, email) {
 }
 
 export function apiCallToGetEvents(uid, jwt) {    
-    return testData;
+    let body = {
+        uid: uid,
+        jwtToken: jwt
+    };
+    return makeApiCall("/getEvents/getEvents", "POST", body);
 }
 
-export function apiCallToChangeEvent(uid, jwt, eventId, newEvent) {
-
+export function apiCallToChangeEvent(updatedEvent) {
+    return makeApiCall("/updateEvent/updateEvent", "POST", updatedEvent);
 }
 
-export function apiCallToCreateEvent(uid, jwt, newEvent) {
-    
+export function apiCallToCreateEvent(newEvent) {
+    return makeApiCall("/createEvent/createEvent", "POST", newEvent);
 }
 
 export function apiCallToDeleteEvent(uid, jwt, eventId) {
-
+    console.log("hello??");
+    let body = {
+        uid: uid,
+        jwtToken: jwt,
+        eid: eventId
+    };
+    return makeApiCall("/deleteEvent/deleteEvent", "POST", body);
 }

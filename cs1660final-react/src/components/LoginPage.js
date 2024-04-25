@@ -26,14 +26,14 @@ const LoginPage = () => {
       }
       else {
         let uname = user.username;
-        console.log(user);
+        //console.log(user);
         navigate(`/home/${uname}`, { state: {user} });
       }
     }
     if (isRegistering) {
       let response = await apiCallRegister(username, password, firstName, lastName, email);
-      console.log(response)
-      console.log(response.success)
+      // console.log(response)
+      // console.log(response.success)
       if (response.success) {
         setIsRegistering(false);
         setMessage('Registration successful! Please login.');

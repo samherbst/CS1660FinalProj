@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { apiCallToGetEvents } from '../function_calls.js';
@@ -10,6 +10,8 @@ import '../style/Home.css';
 const Home = () => {
     const [showBigDay, setShowBigDay] = useState(false);
     const [bigDayProps, setBigDayProps] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+    const [events, setEvents] = useState([]);
 
     const handleDayClick = (date, dayEvents) => {
         setBigDayProps({ date, dayEvents });
@@ -29,12 +31,26 @@ const Home = () => {
     const username = user.username;
     const apiJwt = user.jwt;
 
+    /* eslint-enable react-hooks/exhaustive-deps */
+    const fetchEvents = async () => {
+        const events = await getEvents(apiJwt, uid);
+        setEvents(events);
+        setIsLoading(false);
+    };
+    useEffect(() => {
+        fetchEvents();
+    }, [apiJwt, uid, fetchEvents]);
     const handleLogout = () => {
         navigate('/');
     };
+    /* eslint-enable react-hooks/exhaustive-deps */
 
-    let resp = apiCallToGetEvents(uid, apiJwt);
-    let events = resp.events;
+    const getEvents = async (apiJwt, uid) => {
+        const events = await apiCallToGetEvents(uid, apiJwt);
+        // console.log("debug");
+        // console.log(events.eventlist);
+        return events;
+    };
 
     return (
         <div className='home-page'>
@@ -43,8 +59,8 @@ const Home = () => {
             </div>
             <button id="logout" onClick={handleLogout}>Logout</button>
             <div className='calendar'>
-                {showBigDay && <BigDay {...bigDayProps} onClose={handleClose} user={user} />}
-                <Calendar events={events} onDayClick={handleDayClick} />
+                {showBigDay && <BigDay {...bigDayProps} onClose={handleClose} user={user} fetchEvents={fetchEvents}/>}
+                {!isLoading && <Calendar events={events} onDayClick={handleDayClick} />}
             </div>
         </div>
     );
